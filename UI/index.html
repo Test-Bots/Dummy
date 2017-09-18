@@ -28,6 +28,13 @@
   				return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
     			s4() + '-' + s4() + s4() + s4();
 			}
+			///////////////////////////////////////////////////////////////
+
+   $(document).ready(function () {
+            $('#window').jqxWindow({ width: 'auto', height: 'auto' });
+        });
+
+			/////////////////////////////////////////////////////////////////
 			$(document).on("ready", function () {
 				function assertion(options, callback) {
 					var jsonData = {
