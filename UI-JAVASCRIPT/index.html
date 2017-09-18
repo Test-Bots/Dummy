@@ -12,8 +12,6 @@
 		<link href="../libs/emojione.sprites.css" rel="stylesheet"></link>
 		<script src="../libs/recorder.js" type="text/javascript"></script>
 		<script src="../libs/recorderWorker.js" type="text/javascript"></script>
-		<link href="../libs/purejscarousel.css" rel="stylesheet"></link>
-		<script src="../libs/purejscarousel.js" type="text/javascript"></script>
 	</head>
 	<body>
 		<div id="chatContainer">
@@ -24,9 +22,9 @@
 				// Client has to fill the claims and call the callback.
 				var xhr = new XMLHttpRequest();
 				var _params = {
-					"clientId": botOptions.clientId,
+					"clientId": "",
 					"clientSecret": "",
-					"identity": botOptions.userIdentity,
+					"identity": "",
 					"aud": "",
 					"isAnonymous": false
 				};
@@ -37,7 +35,6 @@
 						var data = JSON.parse(xhr.responseText);
 						options.assertion = data.jwt;
 						options.handleError = koreBot.showError;
-						options.botDetails = koreBot.botDetails;
 						callback(null, options);
 						setTimeout(function () {
 							if (koreBot && koreBot.initToken) {
@@ -54,23 +51,17 @@
 
 			var botOptions = {};
 			botOptions.logLevel = 'debug';
-			botOptions.koreAPIUrl = "https://bots.kore.ai/api/";
-			botOptions.koreSpeechAPIUrl = "https://speech.kore.ai/";
-			//botOptions.bearer = "bearer xyz-------------------";
-			botOptions.ttsSocketUrl = 'wss://speech.kore.ai/tts/ws';
-			botOptions.userIdentity = 'userIdentity';// Provide users email id here
-			botOptions.recorderWorkerPath = '../libs/recorderWorker.js';
+			botOptions.koreAPIUrl = "https://bots.kore.com/api/";
+			botOptions.bearer = "bearer xyz-------------------";
+			botOptions.speechSocketUrl = 'wss://';
 			botOptions.assertionFn = assertion;
 			botOptions.koreAnonymousFn = koreAnonymousFn;
-			botOptions.clientId   = "your client-id"; // secure client-id
+			botOptions.clientId   = "5a37bf24-fea0-4e6b-a816-f9602db08149"; // secure client-id
 			botOptions.botInfo = {name:"your bot name","_id":"bot_id"}; // bot name is case sensitive
 			
 			var koreBot = koreBotChat();
 			var chatConfig={
-				botOptions:botOptions,
-				isSendButton: false,
-				isTTSEnabled: true,
-				isSpeechEnabled: true
+				botOptions:botOptions
 			};
 			document.getElementById('openChatWindow').addEventListener('click',function() {
 				koreBot.show(chatConfig);

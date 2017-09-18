@@ -1,19 +1,13 @@
-requireKr=(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"/KoreBot.js":[function(require,module,exports){
+require=(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"/KoreBot.js":[function(require,module,exports){
 var clients = require('./index.js');
 var EventEmitter = require('events');
 var inherits = require('inherits');
-var lodash;
-if (require('lodash').bind) {
-	lodash = require('lodash');
-} else {
-	lodash = _;
-}
-var bind = lodash.bind;
-var isFunction = lodash.isFunction;
+var bind = require('lodash').bind;
+var isFunction = require('lodash').isFunction;
 var RTM_CLIENT_EVENTS = clients.CLIENT_EVENTS.RTM;
 var RTM_EVENTS = clients.RTM_EVENTS;
 var jstz = require('./jstz.js');
-var noop = lodash.noop;
+var noop = require('lodash').noop;
 
 if(typeof window !== "undefined"){
 	window.kore = window.kore || {};
@@ -248,8 +242,7 @@ KoreBot.prototype.onLogIn = function(err, data) {
 		this.accessToken = data.authorization.accessToken;
 		this.options.accessToken = this.accessToken;
 		this.WebClient.user.accessToken = this.accessToken;
-		this.userInfo = data;
-		this.cbBotDetails(data,this.options.botInfo);
+		this.userInfo = data;		
 		this.RtmClient = new clients.KoreRtmClient({}, this.options);
 		this.RtmClient.start({
 			"botInfo": this.options.botInfo
@@ -273,7 +266,6 @@ KoreBot.prototype.logIn = function(err, data) {
 		this.WebClient = new clients.KoreWebClient({}, this.options);
 		this.WebClient.claims = this.claims;
 		this.cbErrorToClient = data.handleError || noop;
-		this.cbBotDetails = data.botDetails || noop;
 		this.WebClient.login.login({"assertion":data.assertion,"botInfo":this.options.botInfo}, bind(this.onLogIn, this));
 	}
 
@@ -316,10 +308,10 @@ module.exports= {
   KoreRtmClient: require('./lib/clients/rtm/client'),
   CLIENT_EVENTS: {
     WEB: events.CLIENT_EVENTS.WEB,
-    RTM: events.CLIENT_EVENTS.RTM
+    RTM: events.CLIENT_EVENTS.RTM,
   },
   RTM_EVENTS: events.RTM_EVENTS,
-  RTM_MESSAGE_SUBTYPES: events.RTM_MESSAGE_SUBTYPES
+  RTM_MESSAGE_SUBTYPES: events.RTM_MESSAGE_SUBTYPES,
 };
 
 },{"./lib/clients/events":5,"./lib/clients/rtm/client":9,"./lib/clients/web/client":18}],2:[function(require,module,exports){
@@ -674,13 +666,7 @@ module.exports= {
 },{}],3:[function(require,module,exports){
 var EventEmitter = require('events');
 var async = require('async');
-var lodash;
-if (require('lodash').bind) {
-	lodash = require('lodash');
-} else {
-	lodash = _;
-}
-var bind = lodash.bind;
+var bind = require('lodash').bind;
 var inherits = require('inherits');
 var retry = require('retry');
 var urlJoin = require('url-join');
@@ -777,7 +763,7 @@ BaseAPIClient.prototype.makeAPICall = function makeAPICall(endpoint, optData, op
     headers: {
       'User-Agent': this.userAgent,
       "content-type":'application/json'
-    }
+    },
   };
 
   if(optData && optData.opts && optData.opts.authorization){
@@ -787,7 +773,7 @@ BaseAPIClient.prototype.makeAPICall = function makeAPICall(endpoint, optData, op
 
   this._requestQueue.push({
     args: args,
-    cb: apiCallArgs.cb
+    cb: apiCallArgs.cb,
   });
 };
 
@@ -800,7 +786,7 @@ module.exports = BaseAPIClient;
  */
 
 module.exports.WEB = {
-  RATE_LIMITED: 'rate_limited'
+  RATE_LIMITED: 'rate_limited',
 };
 
 module.exports.RTM = {
@@ -834,7 +820,7 @@ module.exports.RTM = {
 
   ATTEMPTING_RECONNECT: 'attempting_reconnect', // the client is attempting to initiate a reconnect
 
-  RAW_MESSAGE: 'raw_message'                   // a message was received from the RTM API. This
+  RAW_MESSAGE: 'raw_message',                   // a message was received from the RTM API. This
                                                 // will also contain the raw message payload that
                                                 // was sent from kore
 };
@@ -843,10 +829,10 @@ module.exports.RTM = {
 module.exports = {
   CLIENT_EVENTS: {
     WEB: require('./client').WEB,
-    RTM: require('./client').RTM
+    RTM: require('./client').RTM,
   },
   RTM_EVENTS: require('./rtm').EVENTS,
-  RTM_MESSAGE_SUBTYPES: require('./rtm').MESSAGE_SUBTYPES
+  RTM_MESSAGE_SUBTYPES: require('./rtm').MESSAGE_SUBTYPES,
 };
 
 },{"./client":4,"./rtm":6}],6:[function(require,module,exports){
@@ -856,12 +842,12 @@ module.exports = {
 
 module.exports.EVENTS = {
   HELLO: 'hello',
-  MESSAGE: 'message'
+  MESSAGE: 'message',
 };
 
 module.exports.MESSAGE_SUBTYPES = {
   BOT_MESSAGE: 'bot_message',
-  ME_MESSAGE: 'me_message'
+  ME_MESSAGE: 'me_message',
 };
 
 },{}],7:[function(require,module,exports){
@@ -887,17 +873,12 @@ module.exports.makeMessageEventWithSubtype = makeMessageEventWithSubtype;
 /**
  * Helpers for working with kore API clients.
  */
-var lodash;
-if (require('lodash').bind) {
-	lodash = require('lodash');
-} else {
-	lodash = _;
-}
-var assign = lodash.assign;
-var isFunction = lodash.isFunction;
-var isUndefined = lodash.isUndefined;
-var isString = lodash.isString;
-var forEach = lodash.forEach;
+
+var assign = require('lodash').assign;
+var isFunction = require('lodash').isFunction;
+var isUndefined = require('lodash').isUndefined;
+var isString = require('lodash').isString;
+var forEach = require('lodash').forEach;
 
 
 var getData = function getData(data, token) {
@@ -949,7 +930,7 @@ var getAPICallArgs = function getAPICallArgs(token, optData, optCb) {
 
   return {
     cb: cb,
-    data: data
+    data: data,
   };
 };
 
@@ -958,28 +939,22 @@ module.exports.getData = getData;
 module.exports.getAPICallArgs = getAPICallArgs;
 
 },{"lodash":24}],9:[function(require,module,exports){
-var lodash;
-if (require('lodash').bind) {
-	lodash = require('lodash');
-} else {
-	lodash = _;
-}
-var bind = lodash.bind;
-var cloneDeep = lodash.cloneDeep;
-var contains = lodash.contains;
+var bind = require('lodash').bind;
+var cloneDeep = require('lodash').cloneDeep;
+var contains = require('lodash').contains;
 var inherits = require('inherits');
-var isUndefined = lodash.isUndefined;
+var isUndefined = require('lodash').isUndefined;
 var debug = require("debug")("botsdk:KoreRTMClient");
 
 var RTM_API_EVENTS = require('../events/rtm').EVENTS;
 var RTM_CLIENT_INTERNAL_EVENT_TYPES = [
   'pong',
-  RTM_API_EVENTS.HELLO
+  RTM_API_EVENTS.HELLO,
 ];
 var UNRECOVERABLE_RTM_START_ERRS = [
   'not_authed',
   'invalid_auth',
-  'account_inactive'
+  'account_inactive',
 ];
 var CLIENT_EVENTS = require('../events/client').RTM;
 var BaseAPIClient = require('../client');
@@ -1257,14 +1232,9 @@ module.exports = KoreRTMClient;
 /**
  * Simple transport using the node request library.
  */
-var lodash;
-if (require('lodash').bind) {
-	lodash = require('lodash');
-} else {
-	lodash = _;
-}
-var has = lodash.has;
-var partial = lodash.partial;
+
+var has = require('lodash').has;
+var partial = require('lodash').partial;
 var request = require('browser-request');
 
 
@@ -1284,7 +1254,7 @@ var handleRequestTranportRes = function handleRequestTranportRes(cb, err, respon
 var getRequestTransportArgs = function getReqestTransportArgs(args) {
   var transportArgs = {
     url: args.url,
-    headers: args.headers
+    headers: args.headers,
   };
 
   if (has(args.data, 'file')) {
@@ -1344,7 +1314,7 @@ inherits(AnonymousLogin, BaseApi);
 AnonymousLogin.prototype.login = function login(opts, optCb) {
   opts = opts || {};
   var args = {
-    opts: opts
+    opts: opts,
   };
   return this.client.makeAPICall('/oAuth/token/jwtgrant/anonymous', args, optCb);
 };
@@ -1439,7 +1409,7 @@ module.exports = {
   RtmApi: require('./rtm.js'),
   LogInApi: require('./login.js'),
   AnonymousLogin : require('./anonymouslogin.js'),
-  HistoryApi : require('./history.js')
+  HistoryApi : require('./history.js'),
 };
 
 
@@ -1457,7 +1427,7 @@ inherits(LogInApi, BaseApi);
 LogInApi.prototype.login = function login(opts, optCb) {
   opts = opts || {};
   var args = {
-    opts: opts
+    opts: opts,
   };
   return this.client.makeAPICall('/oAuth/token/jwtgrant', args, optCb);
 };
@@ -1477,7 +1447,7 @@ inherits(RtmApi, BaseApi);
 
 RtmApi.prototype.start = function start(opts, optCb) {
   var args = {
-    opts: opts
+    opts: opts,
   };
 
   return this.client.makeAPICall('/rtm/start', args, optCb);
@@ -1487,14 +1457,8 @@ RtmApi.prototype.start = function start(opts, optCb) {
 module.exports = RtmApi;
 
 },{"./BaseApi":12,"inherits":23}],18:[function(require,module,exports){
-var lodash;
-if (require('lodash').bind) {
-	lodash = require('lodash');
-} else {
-	lodash = _;
-}
-var bind = lodash.bind;
-var forEach = lodash.forEach;
+var bind = require('lodash').bind;
+var forEach = require('lodash').forEach;
 var inherits = require('inherits');
 
 var BaseAPIClient = require('../client');
@@ -1507,7 +1471,7 @@ function WebAPIClient(token, opts) {
   this.claims = opts.claims;
   this.retryConfig = clientOpts.retryConfig || {
     retries: 5,
-    factor: 3.9
+    factor: 3.9,
   };
   this.user = {};
 }
@@ -2819,7 +2783,6 @@ module.exports = WebAPIClient;
     if (typeof define === 'function' && define.amd) {
         // AMD. Register as an anonymous module.
         define([], factory);
-        module.exports = factory();
     } else if (typeof exports === 'object') {
         // Node. Does not work with strict CommonJS, but
         // only CommonJS-like enviroments that support module.exports,
