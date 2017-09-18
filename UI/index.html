@@ -46,7 +46,7 @@
         var tNow = KJUR.jws.IntDate.get('now');
               var tEnd = KJUR.jws.IntDate.get('now + 1day');
         oPayload.iss = "cs-1fea9ce7-bf85-55be-b796-f35ffa287a23";
-        oPayload.sub = "ravali.kathuri@kore.com";
+        oPayload.sub = uuid;
         oPayload.iat = tNow;
         oPayload.exp = tEnd;
         oPayload.aud = "https://idproxy.kore.com/authorize";
