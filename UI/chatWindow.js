@@ -792,7 +792,7 @@ function koreBotChat() {
             _chatContainer.find('.kore-chat-header .header-title').html(me.config.chatTitle).attr('title',me.config.chatTitle);
             _chatContainer.find('.kore-chat-header .disabled').prop('disabled',false).removeClass("disabled");
             _chatInput.focus();
-            if(me.config.botOptions.sendWelcomeMessage) {
+           /* if(me.config.botOptions.sendWelcomeMessage) {
                 console.log('Sending welcome    message');
                 var messageToBot = {};
                     messageToBot["message"] = {body:"Hi",attachments:[]};
@@ -804,7 +804,7 @@ function koreBotChat() {
                 });
 
                me.config.botOptions.sendWelcomeMessage = false ; 
-            }
+            }*/
         });
 
         bot.on("message", function (message) {
